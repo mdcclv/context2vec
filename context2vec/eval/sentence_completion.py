@@ -59,7 +59,7 @@ def answer_next_question(fd, model, w, word2index):
         if not line:
             return None
         sent, target_pos, target_word = parse_input(line, word2index)
-        if target_word == None:
+        if target_word is None:
             raise Exception("Can't find the target word.")
         if len(sent) <= 1:
             raise Exception("Can't find context for target word.")
@@ -101,7 +101,8 @@ if __name__ == '__main__':
 
     if len(sys.argv) < 4:
         sys.stderr.write(
-            "Usage: %s <questions-filename> <gold-filename> <results-filename> <model-params-filename>\n" % sys.argv[0])
+                "Usage: %s <questions-filename> <gold-filename> <results-filename>"
+                " <model-params-filename>\n" % sys.argv[0])
         sys.exit(1)
 
     questions_fd = open(sys.argv[1], 'r')
@@ -115,9 +116,9 @@ if __name__ == '__main__':
     correct = 0
     while True:
         best_answer = answer_next_question(
-            questions_fd, model_reader.model, model_reader.w, model_reader.word2index)
+                questions_fd, model_reader.model, model_reader.w, model_reader.word2index)
         gold_answer = read_next_answer(gold_fd, model_reader.word2index)
-        if best_answer == None or gold_answer == None:
+        if best_answer is None or gold_answer is None:
             break
         total_questions += 1
         if best_answer == gold_answer:

@@ -22,8 +22,8 @@ class DummyContextModel(object):
 if __name__ == '__main__':
 
     if len(sys.argv) < 6:
-        print("Usage: {} <train-filename> <test-filename> <result-filename> <model-params> <k> [paragraph]".format(
-            sys.argv[0]), file=sys.stderr)
+        print("Usage: {} <train-filename> <test-filename> <result-filename>"
+              " <model-params> <k> [paragraph]".format(sys.argv[0]), file=sys.stderr)
         sys.exit(1)
 
     train_filename = sys.argv[1]
@@ -72,7 +72,9 @@ if __name__ == '__main__':
             if debug:
                 print(('KEY:', key))
                 print()
-            for instance_id, vec, text in zip(key_set.instance_ids, key_set.context_m, key_set.contexts_str):
+            for instance_id, vec, text in zip(key_set.instance_ids,
+                                              key_set.context_m,
+                                              key_set.contexts_str):
                 if debug:
                     print(('QUERY:', text.strip()))
                 result = knn.classify(key, vec, ignore_closest, debug)

@@ -9,7 +9,7 @@ import sys
 import numpy as np
 from chainer import cuda
 import chainer.links as L
-import chainer.optimizers as O
+import chainer.optimizers as Opt
 import chainer.serializers as S
 import chainer.computational_graph as C
 
@@ -119,7 +119,7 @@ if args.context == 'lstm':
 else:
     raise Exception('Unknown context type: {}'.format(args.context))
 
-optimizer = O.Adam()
+optimizer = Opt.Adam()
 optimizer.setup(model)
 
 STATUS_INTERVAL = 1000000
@@ -155,8 +155,9 @@ for epoch in range(args.epoch):
             throuput = float((word_count-last_word_count)) / (now - cur_at)
             cur_mean_loss = (float(accum_loss)-last_accum_loss) / \
                 (word_count-last_word_count)
-            print(('{} words, {:.2f} sec, {:.2f} words/sec, {:.4f} accum_loss/word, {:.4f} cur_loss/word'.format(
-                word_count, duration, throuput, accum_mean_loss, cur_mean_loss)))
+            print('{} words, {:.2f} sec, {:.2f} words/sec, {:.4f} accum_loss/word,'
+                  '{:.4f} cur_loss/word'.format(word_count, duration, throuput,
+                                                accum_mean_loss, cur_mean_loss))
             next_count += STATUS_INTERVAL
             cur_at = now
             last_accum_loss = float(accum_loss)
@@ -166,11 +167,11 @@ for epoch in range(args.epoch):
            accum_loss, 'accum_loss/word', accum_mean_loss))
     reader.close()
 
-if args.wordsfile != None:
+if args.wordsfile is not None:
     dump_embeddings(args.wordsfile+'.targets', model.loss_func.W.data,
                     target_word_units, reader.index2word)
 
-if args.modelfile != None:
+if args.modelfile is not None:
     S.save_npz(args.modelfile, model)
 
 with open(args.modelfile + '.params', 'w') as f:

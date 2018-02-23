@@ -27,7 +27,8 @@ def read_batch(f, batchsize, word2index):
 class SentenceReaderDir(object):
     '''
     Reads a batch of sentences at a time from a corpus directory in random order.
-    Assumes that the sentences are split into different files in the directory according to their word lengths.
+    Assumes that the sentences are split into different files in the directory
+    according to their word lengths.
     '''
 
     sent_counts_filename = SENT_COUNTS_FILENAME

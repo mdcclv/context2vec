@@ -76,7 +76,9 @@ class DatasetReader(object):
 
         <instance id="activate.v.bnc.00008457" docsrc="BNC">
         <context>
-        ... and continue to have an important role in <head>activating</head> laity for what are judged to be religious goals both personally and socially . But generally speaking ...  
+            ... and continue to have an important role in
+            <head>activating</head> laity for what are judged to be religious
+            goals both personally and socially . But generally speaking ...
         </context>
         </instance>
         '''
@@ -87,7 +89,8 @@ class DatasetReader(object):
             sent_context, position = self.extract_target_context(
                 context, isolate_target_sentence)
             sent_context_str = ' '.join(
-                sent_context[:position]) + ' [' + sent_context[position] + '] ' + ' '.join(sent_context[position+1:])
+                sent_context[:position]) + ' [' + sent_context[position] + '] ' + \
+                ' '.join(sent_context[position+1:])
             contexts.append(
                 (sent_context_str, self.context_model.context2vec(sent_context, position)))
 

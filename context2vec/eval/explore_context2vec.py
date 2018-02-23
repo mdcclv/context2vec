@@ -1,19 +1,21 @@
+#!/usr/bin/env python
 '''
 A simple interactive utility for exploring context2vec models
 
 >> c1 c2 [] c3 c4 ...
-returns the top-10 target words whose embedding is most similar to the sentential context embedding (target-to-context similarity)
+returns the top-10 target words whose embedding is most similar to the
+sentential context embedding (target-to-context similarity)
 
 >> [t]
-returns the top-10 target words whose embedding is most similar to the target embedding of t (target-to-target similarity)
+returns the top-10 target words whose embedding is most similar to the target
+embedding of t (target-to-target similarity)
 
 >> c1 c2 [t] c3 c4 ...
-returns the top-10 target words whose combined similarity to both sentential context and target embedding is highest 
-(not giving very good results at the moment...)
-
+returns the top-10 target words whose combined similarity to both sentential
+context and target embedding is highest (not giving very good results at the
+moment...)
 '''
 
-#!/usr/bin/env python
 import numpy
 import six
 import sys
@@ -21,7 +23,6 @@ import traceback
 import re
 
 from chainer import cuda
-from context2vec.common.context_models import Toks
 from context2vec.common.model_reader import ModelReader
 
 
@@ -37,7 +38,7 @@ def parse_input(line):
     sent = line.strip().split()
     target_pos = None
     for i, word in enumerate(sent):
-        if target_exp.match(word) != None:
+        if target_exp.match(word) is not None:
             target_pos = i
             if word == '[]':
                 word = None
@@ -78,10 +79,10 @@ while True:
     try:
         line = six.moves.input('>> ')
         sent, target_pos = parse_input(line)
-        if target_pos == None:
+        if target_pos is None:
             raise ParseException("Can't find the target position.")
 
-        if sent[target_pos] == None:
+        if sent[target_pos] is None:
             target_v = None
         elif sent[target_pos] not in word2index:
             raise ParseException("Target word is out of vocabulary.")

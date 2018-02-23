@@ -1,5 +1,6 @@
 '''
-Used to convert the Microsoft Sentence Completion Challnege (MSCC) learning corpus into a one-sentence-per-line format.
+Used to convert the Microsoft Sentence Completion Challnege (MSCC) learning
+corpus into a one-sentence-per-line format.
 '''
 
 import sys

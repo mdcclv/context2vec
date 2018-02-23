@@ -1,11 +1,14 @@
 '''
-Converts a single large corpus file into a directory, in which for every sentence length k there is a separate file containing all sentences of that length. 
+Converts a single large corpus file into a directory, in which for every
+sentence length k there is a separate file containing all sentences of that
+length.
 '''
 
 import sys
 import os
 from collections import Counter
-from context2vec.common.defs import SENT_COUNTS_FILENAME, WORD_COUNTS_FILENAME, TOTAL_COUNTS_FILENAME
+from context2vec.common.defs import (SENT_COUNTS_FILENAME, WORD_COUNTS_FILENAME,
+                                     TOTAL_COUNTS_FILENAME)
 
 
 def get_file(sub_files, corpus_dir, num_filename):

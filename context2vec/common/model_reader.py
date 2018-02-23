@@ -1,5 +1,4 @@
 import numpy
-from chainer import cuda
 import chainer.serializers as S
 import chainer.links as L
 from nltk.corpus import stopwords
@@ -49,7 +48,8 @@ class ModelReader(object):
 
     def read_lstm_model(self, params, train):
 
-        assert train == False  # reading a model to continue training is currently not supported
+        if train:
+            raise Exception("reading a model to continue training is currently not supported")
 
         words_file = params['config_path'] + params['words_file']
         model_file = params['config_path'] + params['model_file']
@@ -93,8 +93,7 @@ class ModelReader(object):
             word_counts_file = None
 
         if use_stopwords == 'yes':
-            stop = set(stopwords.words(
-                'english') + ['.', ',', '(', ')', '[', ']', ':', '"', "'", "'s", "-", ';', '?', '!', '|', '%', '/', '\\'])
+            stop = set(stopwords.words('english') + [c for c in '.,()[]:"\'-;?!|%/\\'] + ["'s"])
         else:
             stop = set()
 
@@ -107,7 +106,8 @@ class ModelReader(object):
         s[s == 0.] = 1.
         w /= s.reshape((s.shape[0], 1))  # normalize
 
-        # read and normalize context words embeddings (if using different embeddings for context words)
+        # read and normalize context words embeddings
+        # (if using different embeddings for context words)
         if contexts_file is not None:
             # assuming words and contexts vocabs are identical
             c, _, _ = self.read_words(words_file)

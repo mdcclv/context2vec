@@ -12,13 +12,14 @@ from context2vec.common.defs import Toks
 class CbowContext(object):
 
     """
-    Continuous Bag of Words (CBOW) context representation, also called Average of Word Embeddings (AWE).
-    Based on word embeddings learned by 3rd-party
+    Continuous Bag of Words (CBOW) context representation, also called Average
+    of Word Embeddings (AWE).  Based on word embeddings learned by 3rd-party
     """
 
     def __init__(self, targets, contexts, word2index, stopwords, window_size, word_counts):
         self.targets = targets
-        # if contexts not provided then using same embeddings to represent both target and context words
+        # if contexts not provided then using same embeddings to represent both target and
+        # context words
         self.contexts = contexts if contexts is not None else targets
         self.word2index = word2index
         self.window_size = window_size
@@ -30,7 +31,8 @@ class CbowContext(object):
         '''
         Convert sentential context into a vector representation
         :param sent_words: a list of words
-        :param position: the position of the target slot in sent_words (value of sent_words[i] will be ignored)
+        :param position: the position of the target slot in sent_words
+            (value of sent_words[i] will be ignored)
         :return vector representation of context
         '''
 
@@ -74,7 +76,8 @@ class BiLstmContext(chainer.Chain):
     Bidirectional LSTM context.
     """
 
-    def __init__(self, deep, gpu, word2index, in_units, hidden_units, out_units, loss_func, train, drop_ratio=0.0):
+    def __init__(self, deep, gpu, word2index, in_units, hidden_units, out_units,
+                 loss_func, train, drop_ratio=0.0):
         n_vocab = len(word2index)
         l2r_embedding = F.EmbedID(n_vocab, in_units)
         r2l_embedding = F.EmbedID(n_vocab, in_units)
@@ -102,10 +105,12 @@ class BiLstmContext(chainer.Chain):
             )
         if gpu >= 0:
             self.to_gpu()
-        l2r_embedding.W.data = self.xp.random.normal(0, math.sqrt(
-            1. / l2r_embedding.W.data.shape[0]), l2r_embedding.W.data.shape).astype(np.float32)
-        r2l_embedding.W.data = self.xp.random.normal(0, math.sqrt(
-            1. / r2l_embedding.W.data.shape[0]), r2l_embedding.W.data.shape).astype(np.float32)
+        l2r_embedding.W.data = \
+            self.xp.random.normal(0, math.sqrt(1. / l2r_embedding.W.data.shape[0]),
+                                  l2r_embedding.W.data.shape).astype(np.float32)
+        r2l_embedding.W.data = \
+            self.xp.random.normal(0, math.sqrt(1. / r2l_embedding.W.data.shape[0]),
+                                  r2l_embedding.W.data.shape).astype(np.float32)
 
         self.word2index = word2index
         self.train = train
@@ -116,7 +121,8 @@ class BiLstmContext(chainer.Chain):
         '''
         Convert sentential context into a vector representation
         :param sent_words: a list of words
-        :param position: the position of the target slot in sent_words (value of sent_words[i] will be ignored)
+        :param position: the position of the target slot in sent_words
+            (value of sent_words[i] will be ignored)
         :return vector representation of context
         '''
         sent = [self.word2index[word]
@@ -187,7 +193,8 @@ class BiLstmContext(chainer.Chain):
         # concat left-to-right with right-to-left
         sent_bi_h = []
         for l2r_h, r2l_h in zip(l2r_sent_h, r2l_sent_h):
-            if not self.deep:  # projecting hidden state to half out-units dimensionality before concatenating
+            if not self.deep:
+                # projecting hidden state to half out-units dimensionality before concatenating
                 if self.drop_ratio > 0.0:
                     l2r_h = self.lp_l2r(
                         F.dropout(l2r_h, ratio=self.drop_ratio, train=self.train))
