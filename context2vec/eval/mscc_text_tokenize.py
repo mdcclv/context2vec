@@ -13,32 +13,29 @@ def write_paragraph_lines(paragraph_lines):
             sent = sent.lower()
         output_file.write(' '.join(word_tokenize(sent))+'\n')
 
+
 lowercase = True
 
 if len(sys.argv) < 2:
-    sys.stderr.write("Usage: %s <input-filename> <output-filename>\n" % sys.argv[0])
+    sys.stderr.write(
+        "Usage: %s <input-filename> <output-filename>\n" % sys.argv[0])
     sys.exit(1)
-    
+
 input_file = open(sys.argv[1], 'r')
 output_file = open(sys.argv[2], 'w')
 
 paragraph_lines = []
 for i, line in enumerate(input_file):
     if len(line.strip()) == 0 and len(paragraph_lines) > 0:
-        write_paragraph_lines(paragraph_lines)        
+        write_paragraph_lines(paragraph_lines)
         paragraph_lines = []
     else:
         paragraph_lines.append(line)
-    
+
 if len(paragraph_lines) > 0:
     write_paragraph_lines(paragraph_lines)
-    
+
 print(('Read {} lines'.format(i)))
-                          
+
 input_file.close()
 output_file.close()
-        
-        
-        
-        
-            

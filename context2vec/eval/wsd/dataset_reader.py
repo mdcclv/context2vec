@@ -14,20 +14,22 @@ class KeyDataset(object):
         self.contexts_v = []
         self.instance_ids = []
         self.sense_ids = []
-    
+
 
 class DatasetReader(object):
     exp = re.compile('(.*)(<head>[a-zA-Z]+</head>)(.*)')
 
     def __init__(self, context_model):
         self.context_model = context_model
-       
+
     def read_dataset(self, contexts_filename, key_filename, train, isolate_target_sentence):
-        contexts = self.represent_contexts(contexts_filename, isolate_target_sentence)
-        dataset, key2ind, ind2key = self.read_instances(key_filename, contexts, train)
+        contexts = self.represent_contexts(
+            contexts_filename, isolate_target_sentence)
+        dataset, key2ind, ind2key = self.read_instances(
+            key_filename, contexts, train)
         return dataset, key2ind, ind2key
-        
-    def next_context(self, contexts_filename):        
+
+    def next_context(self, contexts_filename):
         with open(contexts_filename, 'r') as f:
             while True:
                 while True:
@@ -39,7 +41,7 @@ class DatasetReader(object):
                         yield line
                 if not line:
                     break
-                
+
     def lower(self, words):
         return [word.lower() for word in words]
 
@@ -56,9 +58,8 @@ class DatasetReader(object):
         else:
             return None, None
 
-
     def extract_target_context(self, paragraph, isolate_target_sentence):
-        
+
         if isolate_target_sentence:
             for sent in sent_tokenize(paragraph):
                 words, position = self.extract_context(sent)
@@ -68,7 +69,6 @@ class DatasetReader(object):
             words, position = self.extract_context(paragraph)
         return words, position
 
-        
     def represent_contexts(self, contexts_filename, isolate_target_sentence):
         '''
         <lexelt item="activate.v">
@@ -83,25 +83,27 @@ class DatasetReader(object):
         contexts_num = 0
         contexts = []
         for context in self.next_context(contexts_filename):
-            contexts_num += 1 
-            sent_context, position = self.extract_target_context(context, isolate_target_sentence)
-            sent_context_str = ' '.join(sent_context[:position]) + ' [' + sent_context[position] + '] ' + ' '.join(sent_context[position+1:])  
-            contexts.append((sent_context_str, self.context_model.context2vec(sent_context, position)))
-        
+            contexts_num += 1
+            sent_context, position = self.extract_target_context(
+                context, isolate_target_sentence)
+            sent_context_str = ' '.join(
+                sent_context[:position]) + ' [' + sent_context[position] + '] ' + ' '.join(sent_context[position+1:])
+            contexts.append(
+                (sent_context_str, self.context_model.context2vec(sent_context, position)))
+
         return contexts
-    
-    
+
     def read_instances(self, key_filename, contexts, train):
         '''
         activate.v activate.v.bnc.00251499 38201 38202
         activate.v activate.v.bnc.00270989 38201
         activate.v activate.v.bnc.00307829 U
-        '''   
+        '''
 
         dataset = []
         key2ind = {}
         ind2key = []
-        
+
         last_key = None
         with open(key_filename, 'r') as f:
             for i, line in enumerate(f):
@@ -113,16 +115,20 @@ class DatasetReader(object):
                 sense_ids = toks[2:]
                 if key is not None and key != last_key:
                     if last_key is not None:
-                        dataset[-1].context_m = np.vstack(dataset[-1].contexts_v) 
-                        norm = np.sqrt((dataset[-1].context_m * dataset[-1].context_m).sum(1))
-                        norm[norm==0.] = 1.
-                        dataset[-1].context_m /= norm.reshape((norm.shape[0], 1))  # normalize
-                   
+                        dataset[-1].context_m = np.vstack(
+                            dataset[-1].contexts_v)
+                        norm = np.sqrt(
+                            (dataset[-1].context_m * dataset[-1].context_m).sum(1))
+                        norm[norm == 0.] = 1.
+                        # normalize
+                        dataset[-1].context_m /= norm.reshape(
+                            (norm.shape[0], 1))
+
                     key2ind[key] = len(dataset)
                     ind2key.append(key)
                     dataset.append(KeyDataset())
                     last_key = key
-                dataset[-1].contexts_str.append(contexts[i][0])    
+                dataset[-1].contexts_str.append(contexts[i][0])
                 dataset[-1].contexts_v.append(contexts[i][1])
                 dataset[-1].instance_ids.append(instance_id)
                 if train:
@@ -130,31 +136,32 @@ class DatasetReader(object):
 
         dataset[-1].context_m = np.vstack(dataset[-1].contexts_v)
         norm = np.sqrt((dataset[-1].context_m * dataset[-1].context_m).sum(1))
-        norm[norm==0.] = 1.
+        norm[norm == 0.] = 1.
         dataset[-1].context_m /= norm.reshape((norm.shape[0], 1))  # normalize
- 
-        return dataset, key2ind, ind2key       
-                
-            
+
+        return dataset, key2ind, ind2key
+
 
 if __name__ == '__main__':
-    
+
     class DummyContextModel(object):
-        
+
         def context2vec(self, sent_context, position):
-            vec = np.array([1.0/len(sent_context) for _ in range(5)], dtype=np.float32)
+            vec = np.array([1.0/len(sent_context)
+                            for _ in range(5)], dtype=np.float32)
             return vec
-    
+
     import sys
-    
+
     if len(sys.argv) < 2:
         sys.stderr.write("Usage: %s <train-filename>\n" % sys.argv[0])
         sys.exit(1)
-     
-    model = DummyContextModel()    
+
+    model = DummyContextModel()
     reader = DatasetReader(model)
-    dataset, key2ind = reader.read_dataset(sys.argv[1], sys.argv[1]+'.key', train=True)
-    
+    dataset, key2ind = reader.read_dataset(
+        sys.argv[1], sys.argv[1]+'.key', train=True)
+
     print(key2ind)
     for oneset in dataset:
         print()
@@ -163,4 +170,3 @@ if __name__ == '__main__':
         print((oneset.contexts_v))
         print((oneset.instance_ids))
         print((oneset.sense_ids))
-        
