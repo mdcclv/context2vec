@@ -158,9 +158,9 @@ if __name__ == '__main__':
     print(key2ind)
     for oneset in dataset:
         print()
-        print(oneset.context_m)
-        print(oneset.contexts_str)
-        print(oneset.contexts_v)
-        print(oneset.instance_ids)
-        print(oneset.sense_ids)
+        print((oneset.context_m))
+        print((oneset.contexts_str))
+        print((oneset.contexts_v))
+        print((oneset.instance_ids))
+        print((oneset.sense_ids))
         

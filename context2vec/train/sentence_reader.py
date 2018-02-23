@@ -74,7 +74,7 @@ class SentenceReaderDir(object):
         index2word = {Toks.UNK:'<UNK>', Toks.BOS:'<BOS>', Toks.EOS:'<EOS>'}
         word2index = {'<UNK>':Toks.UNK, '<BOS>':Toks.BOS, '<EOS>':Toks.EOS}
         unknown_counts = 0
-        for word, count in word2count.items():
+        for word, count in list(word2count.items()):
             if count >= trimfreq and word.lower() != '<unk>' and word.lower() != '<rw>':    
                 ind = len(word2index)
                 word2index[word] = ind
@@ -98,10 +98,10 @@ class SentenceReaderDir(object):
  
 if __name__ == '__main__':
     import sys   
-    reader = SentenceReaderDir(sys.argv[1],int(sys.argv[2]),int(sys.argv[3]))
+    reader = SentenceReaderDir(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
     
     for i in range(2):
-        print('epoc', i)
+        print(('epoc', i))
         reader.open()
         i = 0
         j = 0
@@ -111,7 +111,7 @@ if __name__ == '__main__':
                 print()
             i += 1
             j += len(batch)
-        print('batches', i)
-        print('sents', j)
+        print(('batches', i))
+        print(('sents', j))
         reader.close()
                      

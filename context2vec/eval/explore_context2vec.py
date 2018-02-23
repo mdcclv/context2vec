@@ -53,7 +53,7 @@ def mult_sim(w, target_v, context_v):
  
 
 if len(sys.argv) < 2:
-    print("Usage: %s <model-param-file>"  % (sys.argv[0]), file=sys.stderr)
+    print("Usage: {} <model-param-file>".format(sys.argv[0]), file=sys.stderr)
     sys.exit(1)
 
 model_param_file = sys.argv[1]
@@ -112,7 +112,7 @@ while True:
     except EOFError:
         break
     except ParseException as e:
-        print("ParseException: {}".format(e))                
+        print(("ParseException: {}".format(e)))                
     except Exception:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print("*** print_tb:")

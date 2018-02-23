@@ -35,17 +35,17 @@ class CbowContext(object):
         bow = self.extract_window(sent_words, position)
         bow_inds = [self.word2index[word] for word in bow if word in self.word2index and word not in self.stopwords ]
         if len(bow_inds) == 0:
-            print("NOTICE: Empty bow context for: " + str(sent_words))
+            print(("NOTICE: Empty bow context for: " + str(sent_words)))
             print("Trying with stopwords")
             bow_inds = [self.word2index[word] for word in bow if word in self.word2index ]           
         return self.context_rep(bow_inds)
     
     def count2idf(self, word_counts, word2index):
         sum_counts = sum(word_counts.values())
-        idf = np.zeros((len(word2index),1), dtype=float)
-        for word, count in word_counts.items():
+        idf = np.zeros((len(word2index), 1), dtype=float)
+        for word, count in list(word_counts.items()):
             if word in word2index:
-                idf[word2index[word],0] = math.log(float(sum_counts)/count)
+                idf[word2index[word], 0] = math.log(float(sum_counts)/count)
         return idf
         
     def extract_window(self, sent_words, position):
@@ -141,16 +141,16 @@ class BiLstmContext(chainer.Chain):
         
         batchsize = len(sent_arr)
         
-        bos = self.xp.full((batchsize,1), Toks.BOS, dtype=np.int32)
-        eos = self.xp.full((batchsize,1), Toks.EOS, dtype=np.int32)
+        bos = self.xp.full((batchsize, 1), Toks.BOS, dtype=np.int32)
+        eos = self.xp.full((batchsize, 1), Toks.EOS, dtype=np.int32)
                 
-        l2r_sent = self.xp.hstack((bos,sent_arr))            # <bos> a b c
-        r2l_sent = self.xp.hstack((eos,sent_arr[:,::-1]))    # <eos> c b a 
+        l2r_sent = self.xp.hstack((bos, sent_arr))            # <bos> a b c
+        r2l_sent = self.xp.hstack((eos, sent_arr[:, ::-1]))    # <eos> c b a 
 
         # generate left-to-right contexts representations
         l2r_sent_h = []
         for i in range(l2r_sent.shape[1]-1): # we don't need the last word in the sentence
-            c = chainer.Variable(l2r_sent[:,i])
+            c = chainer.Variable(l2r_sent[:, i])
             e = self.l2r_embed(c)            
             if self.drop_ratio > 0.0:
                 h = self.l2r_1(F.dropout(e, ratio=self.drop_ratio, train=self.train))
@@ -161,7 +161,7 @@ class BiLstmContext(chainer.Chain):
         # generate right-to-left contexts representations
         r2l_sent_h = []
         for i in range(r2l_sent.shape[1]-1): # we don't want the last word in the sentence
-            c = chainer.Variable(r2l_sent[:,i])
+            c = chainer.Variable(r2l_sent[:, i])
             e = self.r2l_embed(c)
             if self.drop_ratio > 0.0:
                 h = self.r2l_1(F.dropout(e, ratio=self.drop_ratio, train=self.train))
@@ -213,11 +213,11 @@ class BiLstmContext(chainer.Chain):
         
         sent_x = []
         for i in range(sent_arr.shape[1]):
-            x = chainer.Variable(sent_arr[:,i])
+            x = chainer.Variable(sent_arr[:, i])
             sent_x.append(x)
             
         accum_loss = None
-        for y,x in zip(sent_y, sent_x):
+        for y, x in zip(sent_y, sent_x):
             loss = self.loss_func(y, x)
             accum_loss = accum_loss + loss if accum_loss is not None else loss 
         

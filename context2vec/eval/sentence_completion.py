@@ -71,9 +71,9 @@ def answer_next_question(fd, model, w, word2index):
         sim = target_v.dot(context_v)
         
         if debug:
-            print('target_word', target_word)
-            print('target_pos', target_pos)
-            print('sim', sim)        
+            print(('target_word', target_word))
+            print(('target_pos', target_pos))
+            print(('sim', sim))        
         
         if best_sim is None or sim > best_sim:
             best_sim = sim
@@ -87,7 +87,7 @@ def read_next_answer(fd, word2index):
         return None
     _, _, target_word = parse_input(line, word2index)
     if debug:
-        print('\ngold target word', target_word)
+        print(('\ngold target word', target_word))
         print('***************************')
     return target_word
 
@@ -100,8 +100,8 @@ if __name__ == '__main__':
         sys.stderr.write("Usage: %s <questions-filename> <gold-filename> <results-filename> <model-params-filename>\n" % sys.argv[0])
         sys.exit(1)
         
-    questions_fd = open(sys.argv[1],'r')
-    gold_fd = open(sys.argv[2],'r')
+    questions_fd = open(sys.argv[1], 'r')
+    gold_fd = open(sys.argv[2], 'r')
     results_fd = open(sys.argv[3], 'w')    
     model_params_filename = sys.argv[4]        
     
@@ -119,7 +119,7 @@ if __name__ == '__main__':
             correct += 1
             
     accuracy = float(correct) / total_questions
-    print("Accuracy: {0}. Correct: {1}. Total: {2}".format(accuracy, correct, total_questions))
+    print(("Accuracy: {0}. Correct: {1}. Total: {2}".format(accuracy, correct, total_questions)))
     results_fd.write("Accuracy: {0}. Correct: {1}. Total: {2}.\n".format(accuracy, correct, total_questions))
         
     questions_fd.close()

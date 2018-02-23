@@ -19,8 +19,8 @@ if len(sys.argv) < 2:
     sys.stderr.write("Usage: %s <input-filename> <output-filename>\n" % sys.argv[0])
     sys.exit(1)
     
-input_file = open(sys.argv[1],'r')
-output_file = open(sys.argv[2],'w')
+input_file = open(sys.argv[1], 'r')
+output_file = open(sys.argv[2], 'w')
 
 paragraph_lines = []
 for i, line in enumerate(input_file):
@@ -33,7 +33,7 @@ for i, line in enumerate(input_file):
 if len(paragraph_lines) > 0:
     write_paragraph_lines(paragraph_lines)
     
-print('Read {} lines'.format(i))
+print(('Read {} lines'.format(i)))
                           
 input_file.close()
 output_file.close()
