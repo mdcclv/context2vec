@@ -22,8 +22,8 @@ if len(sys.argv) < 2:
         "Usage: %s <input-filename> <output-filename>\n" % sys.argv[0])
     sys.exit(1)
 
-input_file = open(sys.argv[1], 'r')
-output_file = open(sys.argv[2], 'w')
+input_file = open(sys.argv[1], 'r', encoding='utf-8')
+output_file = open(sys.argv[2], 'w', encoding='utf-8')
 
 paragraph_lines = []
 for i, line in enumerate(input_file):

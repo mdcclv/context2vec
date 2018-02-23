@@ -105,9 +105,9 @@ if __name__ == '__main__':
                 " <model-params-filename>\n" % sys.argv[0])
         sys.exit(1)
 
-    questions_fd = open(sys.argv[1], 'r')
-    gold_fd = open(sys.argv[2], 'r')
-    results_fd = open(sys.argv[3], 'w')
+    questions_fd = open(sys.argv[1], 'r', encoding='utf-8')
+    gold_fd = open(sys.argv[2], 'r', encoding='utf-8')
+    results_fd = open(sys.argv[3], 'w', encoding='utf-8')
     model_params_filename = sys.argv[4]
 
     model_reader = ModelReader(model_params_filename)

@@ -20,7 +20,7 @@ from context2vec.common.defs import IN_TO_OUT_UNITS_RATIO, NEGATIVE_SAMPLING_NUM
 
 # TODO: LOWER AS ARG
 def dump_embeddings(filename, w, units, index2word):
-    with open(filename, 'w') as f:
+    with open(filename, 'w', encoding="utf-8") as f:
         f.write('%d %d\n' % (len(index2word), units))
         for i in range(w.shape[0]):
             v = ' '.join(['%f' % v for v in w[i]])
@@ -176,7 +176,7 @@ if args.wordsfile is not None:
 if args.modelfile is not None:
     S.save_npz(args.modelfile, model)
 
-with open(args.modelfile + '.params', 'w') as f:
+with open(args.modelfile + '.params', 'w', encoding='utf-8') as f:
     f.write('model_file\t' + args.modelfile[args.modelfile.rfind('/')+1:]+'\n')
     f.write('words_file\t' +
             args.wordsfile[args.wordsfile.rfind('/')+1:]+'.targets\n')

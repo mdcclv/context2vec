@@ -30,7 +30,7 @@ class DatasetReader(object):
         return dataset, key2ind, ind2key
 
     def next_context(self, contexts_filename):
-        with open(contexts_filename, 'r') as f:
+        with open(contexts_filename, 'r', encoding='utf-8') as f:
             while True:
                 while True:
                     line = f.readline()
@@ -108,7 +108,7 @@ class DatasetReader(object):
         ind2key = []
 
         last_key = None
-        with open(key_filename, 'r') as f:
+        with open(key_filename, 'r', encoding='utf-8') as f:
             for i, line in enumerate(f):
                 if len(line.strip()) == 0:
                     continue

@@ -25,7 +25,7 @@ class ModelReader(object):
         params = {}
         config_path = filename[:filename.rfind('/')+1]
         params['config_path'] = config_path
-        with open(filename, 'r') as f:
+        with open(filename, 'r', encoding='utf-8') as f:
             for line in f:
                 if not line.startswith('#'):
                     [param, val] = line.strip().split()
@@ -122,7 +122,7 @@ class ModelReader(object):
         return w, word2index, index2word, model
 
     def read_words(self, filename):
-        with open(filename, 'r') as f:
+        with open(filename, 'r', encoding='utf-8') as f:
             ss = f.readline().split()
             n_vocab, n_units = int(ss[0]), int(ss[1])
             word2index = {}
@@ -140,7 +140,7 @@ class ModelReader(object):
 
     def read_word_counts(self, filename):
         counts = {}
-        with open(filename) as f:
+        with open(filename, encoding='utf-8') as f:
             for line in f:
                 if len(line) > 0:
                     tokens = line.split('\t')

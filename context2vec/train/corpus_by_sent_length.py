@@ -14,7 +14,7 @@ from context2vec.common.defs import (SENT_COUNTS_FILENAME, WORD_COUNTS_FILENAME,
 def get_file(sub_files, corpus_dir, num_filename):
     if num_filename not in sub_files:
         full_file_name = corpus_dir + '/' + num_filename
-        sub_files[num_filename] = open(full_file_name, 'w')
+        sub_files[num_filename] = open(full_file_name, 'w', encoding='utf-8')
     return sub_files[num_filename]
 
 
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         print(("usage: %s <corpus-file> [max-sent-len]" % (sys.argv[0])))
         sys.exit(1)
 
-    corpus_file = open(sys.argv[1], 'r')
+    corpus_file = open(sys.argv[1], 'r', encoding='utf-8')
     if len(sys.argv) > 2:
         max_sent_len = int(sys.argv[2])
     else:
@@ -33,9 +33,9 @@ if __name__ == '__main__':
 
     corpus_dir = sys.argv[1]+'.DIR'
     os.makedirs(corpus_dir)
-    sent_counts_file = open(corpus_dir+'/'+SENT_COUNTS_FILENAME, 'w')
-    word_counts_file = open(corpus_dir+'/'+WORD_COUNTS_FILENAME, 'w')
-    totals_file = open(corpus_dir+'/'+TOTAL_COUNTS_FILENAME, 'w')
+    sent_counts_file = open(corpus_dir+'/'+SENT_COUNTS_FILENAME, 'w', encoding='utf-8')
+    word_counts_file = open(corpus_dir+'/'+WORD_COUNTS_FILENAME, 'w', encoding='utf-8')
+    totals_file = open(corpus_dir+'/'+TOTAL_COUNTS_FILENAME, 'w', encoding='utf-8')
 
     sub_files = {}
     sent_counts = Counter()

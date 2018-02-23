@@ -66,7 +66,7 @@ if __name__ == '__main__':
         test_filename, test_filename+'.key', False, isolate_target_sentence)
 
     print('Starting to classify test set:')
-    with open(result_filename, 'w') as o:
+    with open(result_filename, 'w', encoding='utf-8') as o:
         for ind, key_set in enumerate(test_set):
             key = test_ind2key[ind]
             if debug:
