@@ -11,9 +11,9 @@ Oren Melamud, Jacob Goldberger, Ido Dagan. CoNLL, 2016 [[pdf]](http://u.cs.biu.a
 
 ## Requirements
 
-* Python 2.7
-* Chainer 1.7 ([chainer](http://chainer.org/))
-* NLTK 3.0 ([NLTK](http://www.nltk.org/))  - optional (only required for the AWE baseline and MSCC evaluation)
+* Python 3.5+
+* Chainer 3.4 ([chainer](http://chainer.org/))
+* NLTK 3.2+ ([NLTK](http://www.nltk.org/))  - optional (only required for the AWE baseline and MSCC evaluation)
 
 ## Installation
 
