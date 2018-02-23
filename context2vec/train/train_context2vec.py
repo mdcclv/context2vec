@@ -13,7 +13,7 @@ import chainer.optimizers as O
 import chainer.serializers as S
 import chainer.computational_graph as C
 
-from sentence_reader import SentenceReaderDir
+from .sentence_reader import SentenceReaderDir
 from context2vec.common.context_models import BiLstmContext
 from context2vec.common.defs import IN_TO_OUT_UNITS_RATIO, NEGATIVE_SAMPLING_NUM
 
@@ -77,15 +77,15 @@ def parse_arguments():
     else:
         raise Exception("Invalid deep choice: " + args.deep)
     
-    print('GPU: {}'.format(args.gpu))
-    print('# unit: {}'.format(args.unit))
-    print('Minibatch-size: {}'.format(args.batchsize))
-    print('# epoch: {}'.format(args.epoch))
-    print('Context type: {}'.format(args.context))
-    print('Deep: {}'.format(args.deep))
-    print('Dropout: {}'.format(args.dropout))
-    print('Trimfreq: {}'.format(args.trimfreq))
-    print('NS Power: {}'.format(args.ns_power))
+    print(('GPU: {}'.format(args.gpu)))
+    print(('# unit: {}'.format(args.unit)))
+    print(('Minibatch-size: {}'.format(args.batchsize)))
+    print(('# epoch: {}'.format(args.epoch)))
+    print(('Context type: {}'.format(args.context)))
+    print(('Deep: {}'.format(args.deep)))
+    print(('Dropout: {}'.format(args.dropout)))
+    print(('Trimfreq: {}'.format(args.trimfreq)))
+    print(('NS Power: {}'.format(args.ns_power)))
     print('')
        
     return args 
@@ -104,8 +104,8 @@ if args.gpu >= 0:
 xp = cuda.cupy if args.gpu >= 0 else np
     
 reader = SentenceReaderDir(args.indir, args.trimfreq, args.batchsize)
-print('n_vocab: %d' % (len(reader.word2index)-3)) # excluding the three special tokens
-print('corpus size: %d' % (reader.total_words))
+print(('n_vocab: %d' % (len(reader.word2index)-3))) # excluding the three special tokens
+print(('corpus size: %d' % (reader.total_words)))
 
 cs = [reader.trimmed_word2count[w] for w in range(len(reader.trimmed_word2count))]
 loss_func = L.NegativeSampling(target_word_units, cs, NEGATIVE_SAMPLING_NUM, args.ns_power)
@@ -128,7 +128,7 @@ for epoch in range(args.epoch):
     accum_loss = 0.0
     last_accum_loss = 0.0
     last_word_count = 0
-    print('epoch: {0}'.format(epoch))
+    print(('epoch: {0}'.format(epoch)))
 
     reader.open()    
     for sent in reader.next_batch():
@@ -148,14 +148,14 @@ for epoch in range(args.epoch):
             duration = now - cur_at
             throuput = float((word_count-last_word_count)) / (now - cur_at)
             cur_mean_loss = (float(accum_loss)-last_accum_loss)/(word_count-last_word_count)
-            print('{} words, {:.2f} sec, {:.2f} words/sec, {:.4f} accum_loss/word, {:.4f} cur_loss/word'.format(
-                word_count, duration, throuput, accum_mean_loss, cur_mean_loss))
+            print(('{} words, {:.2f} sec, {:.2f} words/sec, {:.4f} accum_loss/word, {:.4f} cur_loss/word'.format(
+                word_count, duration, throuput, accum_mean_loss, cur_mean_loss)))
             next_count += STATUS_INTERVAL
             cur_at = now
             last_accum_loss = float(accum_loss)
             last_word_count = word_count
 
-    print 'accum words per epoch', word_count, 'accum_loss', accum_loss, 'accum_loss/word', accum_mean_loss
+    print('accum words per epoch', word_count, 'accum_loss', accum_loss, 'accum_loss/word', accum_mean_loss)
     reader.close()
     
 if args.wordsfile != None:        

@@ -53,7 +53,7 @@ def mult_sim(w, target_v, context_v):
  
 
 if len(sys.argv) < 2:
-    print >> sys.stderr, "Usage: %s <model-param-file>"  % (sys.argv[0])
+    print("Usage: %s <model-param-file>"  % (sys.argv[0]), file=sys.stderr)
     sys.exit(1)
 
 model_param_file = sys.argv[1]
@@ -105,19 +105,19 @@ while True:
         for i in (-similarity).argsort():
             if numpy.isnan(similarity[i]):
                 continue
-            print('{0}: {1}'.format(index2word[i], similarity[i]))
+            print(('{0}: {1}'.format(index2word[i], similarity[i])))
             count += 1
             if count == n_result:
                 break
     except EOFError:
         break
     except ParseException as e:
-        print "ParseException: {}".format(e)                
+        print("ParseException: {}".format(e))                
     except Exception:
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print "*** print_tb:"
+        print("*** print_tb:")
         traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
-        print "*** print_exception:"
+        print("*** print_exception:")
         traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
 
 
