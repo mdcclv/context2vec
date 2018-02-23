@@ -50,11 +50,11 @@ class SentenceReaderDir(object):
 
     def open(self):
         self.fds = []
-        with open(self.path+'/'+self.sent_counts_filename) as f:
+        with open(self.path+'/'+self.sent_counts_filename, encoding='utf-8') as f:
             for line in f:
                 [filename, count] = line.strip().split()
                 batches = int(math.ceil(float(count) / self.batchsize))
-                fd = open(self.path+'/'+filename, 'r')
+                fd = open(self.path+'/'+filename, 'r', encoding='utf-8')
                 self.fds = self.fds + [fd]*batches
         np.random.seed(1034)
         np.random.shuffle(self.fds)
@@ -66,7 +66,7 @@ class SentenceReaderDir(object):
 
     def read_and_trim_vocab(self, trimfreq):
         word2count = collections.Counter()
-        with open(self.path+'/'+self.word_counts_filename) as f:
+        with open(self.path+'/'+self.word_counts_filename, encoding='utf-8') as f:
             for line in f:
                 [word, count] = line.strip().lower().split()
                 word2count[word] = int(count)

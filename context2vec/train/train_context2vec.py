@@ -13,7 +13,7 @@ import chainer.optimizers as Opt
 import chainer.serializers as S
 import chainer.computational_graph as C
 
-from .sentence_reader import SentenceReaderDir
+from sentence_reader import SentenceReaderDir
 from context2vec.common.context_models import BiLstmContext
 from context2vec.common.defs import IN_TO_OUT_UNITS_RATIO, NEGATIVE_SAMPLING_NUM
 
@@ -98,10 +98,12 @@ context_word_units = args.unit
 lstm_hidden_units = IN_TO_OUT_UNITS_RATIO*args.unit
 target_word_units = IN_TO_OUT_UNITS_RATIO*args.unit
 
-if args.gpu >= 0:
+if args.gpu > 0:
     cuda.check_cuda_available()
     cuda.get_device(args.gpu).use()
-xp = cuda.cupy if args.gpu >= 0 else np
+    xp = cuda.cupy
+else:
+    xp = np
 
 reader = SentenceReaderDir(args.indir, args.trimfreq, args.batchsize)
 # excluding the three special tokens
